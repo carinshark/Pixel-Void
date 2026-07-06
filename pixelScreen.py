@@ -1,21 +1,19 @@
 from PIL import Image
-
+import pygame
 import numpy as np
 
+#colors
 background = np.array((0,0,0))
-
 blank= np.array((255,255,255),dtype="uint8")
 
-square_size=4
-line_width=2
-
-
-grid_size=(3,4)
+#adjustable parameters
+square_size=3
+line_width=1
+grid_size=(20,20)
 
 #storing of line data
 #odd values on the last row are irrelevant.
 grid_data=np.full((grid_size[0]*2+1,grid_size[1]+1,3),blank,dtype="uint8")
-
 
 #this converts it into visual pixels based on the parameters given
 #THIS PART SPECIFICALLY IS COLUMN MAJOR RATHER THAN ROW MAJOR
@@ -38,14 +36,30 @@ for r in range(0,len(grid_data),2):
     for c in range(0,len(grid_data[0])-1):
         x=(r//2)*(square_size+line_width)
         y=c*(square_size+line_width)+line_width
-        print(x,y)
         for i in range(line_width):
             for j in range(square_size):
                 image_data[y+j,x+i]=grid_data[r][c]
 
+img = Image.fromarray(image_data)
 
-rsize=image_data.shape
+img=img.resize((500,500),resample=Image.Resampling.NEAREST)
 
+pygame.init()
 
-canvas = Image.fromarray(image_data)
-canvas.show()
+canvas = pygame.display.set_mode((500,500))
+
+pygame.display.set_caption("Pixel Void")
+exit = False
+
+while not exit:
+    canvas.fill(background)
+    
+    imageTexture=pygame.image.frombytes(img.tobytes(),(500,500),"RGB")
+
+    canvas.blit(imageTexture)
+    for event in pygame.event.get():
+        if event.type==pygame.QUIT:
+            exit=True
+        
+    pygame.display.update()
+
