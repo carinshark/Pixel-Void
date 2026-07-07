@@ -2,6 +2,9 @@ from PIL import Image
 import pygame
 import numpy as np
 
+from simpleUtility import SimpleUtility
+
+
 #colors
 background = np.array((0,0,0))
 blank= np.array((255,255,255),dtype="uint8")
@@ -73,6 +76,7 @@ while not exit:
             draw_location=event.pos
         elif event.type==pygame.MOUSEWHEEL:
             brush_size+=event.y
+            brush_size=SimpleUtility.limit(brush_size,4,40)
             
 
     pygame.draw.circle(canvas,blank,draw_location,brush_size,width=2)
