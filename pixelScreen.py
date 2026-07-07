@@ -50,16 +50,33 @@ canvas = pygame.display.set_mode((500,500))
 
 pygame.display.set_caption("Pixel Void")
 exit = False
+is_drawing=False
+imageTexture=pygame.image.frombytes(img.tobytes(),(500,500),"RGB")
+
+draw_location = (0,0)
+brush_size=10
 
 while not exit:
     canvas.fill(background)
     
-    imageTexture=pygame.image.frombytes(img.tobytes(),(500,500),"RGB")
+    
 
     canvas.blit(imageTexture)
     for event in pygame.event.get():
         if event.type==pygame.QUIT:
             exit=True
+        elif event.type==pygame.MOUSEBUTTONUP:
+            is_drawing=False
+        elif event.type==pygame.MOUSEBUTTONDOWN:
+            is_drawing=True
+        elif event.type==pygame.MOUSEMOTION:
+            draw_location=event.pos
+        elif event.type==pygame.MOUSEWHEEL:
+            brush_size+=event.y
+            
+
+    pygame.draw.circle(canvas,blank,draw_location,brush_size,width=2)
+
         
     pygame.display.update()
 
