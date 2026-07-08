@@ -23,3 +23,5 @@ class SimpleUtility:
             elif value>max:
                 return max
             return value
+    
+

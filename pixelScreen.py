@@ -1,7 +1,7 @@
 from PIL import Image
 import pygame
 import numpy as np
-
+from math import ceil,floor
 from simpleUtility import SimpleUtility
 
 
@@ -12,16 +12,18 @@ blank= np.array((255,255,255),dtype="uint8")
 #adjustable parameters
 square_size=3
 line_width=1
-grid_size=2
+grid_size=10
 canvas_size=500
 
 step=line_width+square_size
 
-grid_scale=canvas_size/(grid_size*step+1)
+resolution=(grid_size*step+line_width)
+
+grid_scale=canvas_size/resolution
 
 #returns 
 def pixel_to_point(p):
-    return (int(p[0]//grid_scale),int(p[1]//grid_scale))
+    return (int((p[0]//grid_scale)),int((p[1]//grid_scale)))
 
 #storing of line data
 #odd values on the last row are irrelevant.
@@ -29,8 +31,8 @@ grid_data=np.full((grid_size*2+1,grid_size+1,3),blank,dtype="uint8")
 
 #this converts it into visual pixels based on the parameters given
 #THIS PART SPECIFICALLY IS COLUMN MAJOR RATHER THAN ROW MAJOR
-image_data=np.full((square_size*grid_size+line_width*(grid_size+1),
-                    square_size*grid_size+line_width*(grid_size+1)
+image_data=np.full((resolution,
+                    resolution
                     ,3),background,dtype="uint8")
 
 
@@ -81,10 +83,15 @@ while not exit:
     for event in pygame.event.get():
         if event.type==pygame.QUIT:
             exit=True
+        elif event.type==pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                exit=True
         elif event.type==pygame.MOUSEBUTTONUP:
-            is_drawing=False
+            if event.button==pygame.BUTTON_LEFT:
+                is_drawing=False
         elif event.type==pygame.MOUSEBUTTONDOWN:
-            is_drawing=True
+            if event.button==pygame.BUTTON_LEFT:
+                is_drawing=True
 
         elif event.type==pygame.MOUSEMOTION:
             draw_location=event.pos
@@ -94,9 +101,36 @@ while not exit:
             
     if is_drawing:
         point = pixel_to_point(draw_location)
-        print(point)
+        # point=(point[0]*2//step/2,point[1]*2//step/2)
+        # print(point)
 
-    pygame.draw.circle(canvas,blank,draw_location,brush_size*grid_scale,width=5)
+        brush_box=((point[0]-brush_size,point[0]+brush_size),(point[1]-brush_size,point[1]+brush_size))
+
+        # if 0 in [point[0]%step,point[1]%step]:
+        #     print("point!")
+        
+        
+
+        #limit brush to edge of canvas
+        brush_box= SimpleUtility.limit(brush_box,0,resolution)
+        
+        #align to grid
+        brush_box = ((floor(brush_box[0][0]/step)*step,ceil(brush_box[0][1]/step)*step),
+                     (floor(brush_box[1][0]/step)*step,ceil(brush_box[1][1]/step)*step))
+
+        print(brush_box)
+
+
+        #for testing purposes, it creates points at the furthest ones
+        brush_points=[]
+        for i in [(0,0),(0,1),(1,1),(1,0)]:
+            pygame.draw.circle(canvas,(0,0,255),(brush_box[0][i[0]]*grid_scale,brush_box[1][i[1]]*grid_scale),10)
+                
+
+
+
+
+    pygame.draw.circle(canvas,(0,0,255),draw_location,brush_size*grid_scale,width=5)
 
         
     pygame.display.update()
