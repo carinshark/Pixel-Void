@@ -12,16 +12,25 @@ blank= np.array((255,255,255),dtype="uint8")
 #adjustable parameters
 square_size=3
 line_width=1
-grid_size=(20,20)
+grid_size=2
+canvas_size=500
+
+step=line_width+square_size
+
+grid_scale=canvas_size/(grid_size*step+1)
+
+#returns 
+def pixel_to_point(p):
+    return (int(p[0]//grid_scale),int(p[1]//grid_scale))
 
 #storing of line data
 #odd values on the last row are irrelevant.
-grid_data=np.full((grid_size[0]*2+1,grid_size[1]+1,3),blank,dtype="uint8")
+grid_data=np.full((grid_size*2+1,grid_size+1,3),blank,dtype="uint8")
 
 #this converts it into visual pixels based on the parameters given
 #THIS PART SPECIFICALLY IS COLUMN MAJOR RATHER THAN ROW MAJOR
-image_data=np.full((square_size*grid_size[1]+line_width*(grid_size[1]+1),
-                    square_size*grid_size[0]+line_width*(grid_size[0]+1)
+image_data=np.full((square_size*grid_size+line_width*(grid_size+1),
+                    square_size*grid_size+line_width*(grid_size+1)
                     ,3),background,dtype="uint8")
 
 
@@ -43,26 +52,30 @@ for r in range(0,len(grid_data),2):
             for j in range(square_size):
                 image_data[y+j,x+i]=grid_data[r][c]
 
-img = Image.fromarray(image_data)
+#this replaces it with random colored pixels (for testing)
+# image_data=(np.random.rand(9,9,3)*255).astype(np.uint8)
 
-img=img.resize((500,500),resample=Image.Resampling.NEAREST)
 
 pygame.init()
 
-canvas = pygame.display.set_mode((500,500))
+canvas = pygame.display.set_mode((canvas_size,canvas_size))
 
 pygame.display.set_caption("Pixel Void")
 exit = False
 is_drawing=False
-imageTexture=pygame.image.frombytes(img.tobytes(),(500,500),"RGB")
 
 draw_location = (0,0)
-brush_size=10
+brush_size=1
 
 while not exit:
     canvas.fill(background)
-    
-    
+
+    img = Image.fromarray(image_data)
+
+    img=img.resize((canvas_size,canvas_size),resample=Image.Resampling.NEAREST)
+
+    imageTexture=pygame.image.frombytes(img.tobytes(),(canvas_size,canvas_size),"RGB")
+
 
     canvas.blit(imageTexture)
     for event in pygame.event.get():
@@ -72,15 +85,20 @@ while not exit:
             is_drawing=False
         elif event.type==pygame.MOUSEBUTTONDOWN:
             is_drawing=True
+
         elif event.type==pygame.MOUSEMOTION:
             draw_location=event.pos
-        elif event.type==pygame.MOUSEWHEEL:
-            brush_size+=event.y
-            brush_size=SimpleUtility.limit(brush_size,4,40)
+        elif event.type==pygame.MOUSEWHEEL: 
+            brush_size+=event.y/2
+            brush_size=SimpleUtility.limit(brush_size,.5,grid_size*2+1)
             
+    if is_drawing:
+        point = pixel_to_point(draw_location)
+        print(point)
 
-    pygame.draw.circle(canvas,blank,draw_location,brush_size,width=2)
+    pygame.draw.circle(canvas,blank,draw_location,brush_size*grid_scale,width=5)
 
         
     pygame.display.update()
+
 
