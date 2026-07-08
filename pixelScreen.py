@@ -3,17 +3,20 @@ import pygame
 import numpy as np
 from math import ceil,floor
 from simpleUtility import SimpleUtility
+from appSettings import AppSettings
 
+
+settings = AppSettings()
 
 #colors
-background = np.array((0,0,0))
-blank= np.array((255,255,255),dtype="uint8")
+background = settings.background
+blank= settings.blank
 
 #adjustable parameters
-square_size=3
-line_width=1
-grid_size=10
-canvas_size=500
+square_size=settings.square_size
+line_width=settings.line_width
+grid_size=settings.grid_size
+canvas_size=settings.canvas_size
 
 step=line_width+square_size
 
@@ -118,14 +121,18 @@ while not exit:
         brush_box = ((floor(brush_box[0][0]/step)*step,ceil(brush_box[0][1]/step)*step),
                      (floor(brush_box[1][0]/step)*step,ceil(brush_box[1][1]/step)*step))
 
-        print(brush_box)
+        brush_point_box=((brush_box[0][0]//4,brush_box[0][1]//4),
+                         (brush_box[1][0]//4,brush_box[1][1]//4))
+
+        print(brush_point_box)
 
 
         #for testing purposes, it creates points at the furthest ones
         brush_points=[]
         for i in [(0,0),(0,1),(1,1),(1,0)]:
             pygame.draw.circle(canvas,(0,0,255),(brush_box[0][i[0]]*grid_scale,brush_box[1][i[1]]*grid_scale),10)
-                
+        
+
 
 
 
