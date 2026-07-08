@@ -10,8 +10,16 @@ class SimpleUtility:
     @return: min if value<min or max if value>max or value on all other cases
     """
     def limit(value,min,max):
-        if value<min:
-            return min
-        elif value>max:
-            return max
-        return value
+        if type(value)==tuple:
+            temp=[]
+            for item in value:
+                temp.append(SimpleUtility.limit(item,min,max))
+
+            return tuple(temp)
+
+        else:
+            if value<min:
+                return min
+            elif value>max:
+                return max
+            return value
