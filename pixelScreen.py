@@ -18,11 +18,14 @@ line_width=settings.line_width
 grid_size=settings.grid_size
 canvas_size=settings.canvas_size
 
+debug_mode=settings.debug_mode
+
+#calculated variables (not for changing)
 step=line_width+square_size
-
 resolution=(grid_size*step+line_width)
-
 grid_scale=canvas_size/resolution
+
+
 
 #storing of line data
 #odd values on the last row are irrelevant.
@@ -33,6 +36,8 @@ grid_data=np.full((grid_size*2+1,grid_size+1,3),blank,dtype="uint8")
 image_data=np.full((resolution,
                     resolution
                     ,3),background,dtype="uint8")
+
+
 
 def update_image():
     #horizontal lines
@@ -91,9 +96,11 @@ pygame.display.set_caption("Pixel Void")
 
 
 
+#gameplay variables
 
 exit = False
-is_drawing=False
+draw1=False
+draw2=False
 
 draw_location = (0,0)
 brush_size=1
@@ -103,7 +110,7 @@ while not exit:
 
     update_image()
 
-
+    color=0
 
     canvas.blit(imageTexture)
     for event in pygame.event.get():
@@ -114,10 +121,16 @@ while not exit:
                 exit=True
         elif event.type==pygame.MOUSEBUTTONUP:
             if event.button==pygame.BUTTON_LEFT:
-                is_drawing=False
+                draw1=False
+                
+            elif event.button==pygame.BUTTON_RIGHT:
+                draw2=False
+                
         elif event.type==pygame.MOUSEBUTTONDOWN:
             if event.button==pygame.BUTTON_LEFT:
-                is_drawing=True
+                draw1=True
+            elif event.button==pygame.BUTTON_RIGHT:
+                draw2=True
 
         elif event.type==pygame.MOUSEMOTION:
             draw_location=event.pos
@@ -125,17 +138,11 @@ while not exit:
             brush_size+=event.y/2
             brush_size=SimpleUtility.limit(brush_size,.5,grid_size*2+1)
             
-    if is_drawing:
+    if draw1 or draw2:
         point = pixel_to_point(draw_location)
-
-        
-
-        
 
         brush_box=((point[0]-brush_size,point[0]+brush_size),(point[1]-brush_size,point[1]+brush_size))
         
-        
-
         #limit brush to edge of canvas
         brush_box= SimpleUtility.limit(brush_box,0,resolution)
         
@@ -147,42 +154,36 @@ while not exit:
         brush_point_box=((brush_box[0][0]//step,brush_box[0][1]//step),
                          (brush_box[1][0]//step,brush_box[1][1]//step))
 
-        print(brush_point_box)
-
-        pygame.draw.circle(canvas,(0,255,0),(point[0]*grid_scale,point[1]*grid_scale),8)
-
+        
         
         for x in range(brush_point_box[0][0]*2,brush_point_box[0][1]*2):
             for y in range(brush_point_box[1][0],brush_point_box[1][1]):
                 # print(x,y)
                 loc=line_to_pixel((x,y))
-                pygame.draw.circle(canvas,(255,0,255),(loc[0]*grid_scale,loc[1]*grid_scale),3)
+                if debug_mode:
+                    pygame.draw.circle(canvas,(255,0,255),(loc[0]*grid_scale,loc[1]*grid_scale),3)
+
                 if dist(loc,point)<=brush_size:
-                    pygame.draw.circle(canvas,(255,0,0),(loc[0]*grid_scale,loc[1]*grid_scale),5)
+                    if debug_mode:
+                        pygame.draw.circle(canvas,(255,0,0),(loc[0]*grid_scale,loc[1]*grid_scale),5)
+
                     if x>=0 and x<len(grid_data) and y>=0 and y<len(grid_data[0]):
                         # print(len(grid_data))
-                        grid_data[x,y]=background
+                        if draw1 and draw2:
+                            grid_data[x,y]=SimpleUtility.mix_colors(settings.color1,settings.color2)
+                        elif draw1:
+                            grid_data[x,y]=settings.color1
+                        elif draw2:
+                            grid_data[x,y]=settings.color2
+
+                        
 
 
 
-
-
-        #old code i left here in case i need to go back to it - did not work
-        # for hline in range(brush_point_box[0][0]*2,brush_point_box[0][1]*2,2):
-        #     for vertical in range(brush_point_box[1][0],brush_point_box[1][1]):
-        #         grid_data[hline][vertical] = blank
-        #         loc=get_line_location((hline,vertical))
-        #         print(hline,vertical)
-        #         pygame.draw.circle(canvas,(255,0,0),(loc[0]*grid_scale,loc[1]*grid_scale),8)
-        
-        # for vline in range(brush_point_box[1][0]*2,brush_point_box[1][1]*2,2):
-        #     for vertical in range(brush_point_box[1][0],brush_point_box[1][1]):
-        #         grid_data[vline+1][vertical] = blank
-        
-
-
-        for i in [(0,0),(0,1),(1,1),(1,0)]:
-            pygame.draw.circle(canvas,(0,0,255),(brush_box[0][i[0]]*grid_scale,brush_box[1][i[1]]*grid_scale),10)
+        if debug_mode:
+            pygame.draw.circle(canvas,(0,255,0),(point[0]*grid_scale,point[1]*grid_scale),8)
+            for i in [(0,0),(0,1),(1,1),(1,0)]:
+                pygame.draw.circle(canvas,(0,0,255),(brush_box[0][i[0]]*grid_scale,brush_box[1][i[1]]*grid_scale),10)
         
         
 

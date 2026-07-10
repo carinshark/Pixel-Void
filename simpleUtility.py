@@ -1,3 +1,5 @@
+import numpy as np
+
 class SimpleUtility:
 
     """
@@ -24,4 +26,9 @@ class SimpleUtility:
                 return max
             return value
     
+    #combine colors
+    def mix_colors(color1:np.ndarray,color2:np.ndarray):
+        return np.average(np.array((color1,color2)),0).astype("uint8")
+    
+
 
