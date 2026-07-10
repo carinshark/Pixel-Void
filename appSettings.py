@@ -8,7 +8,7 @@ class AppSettings:
         self.blank= np.array((255,255,255),dtype="uint8")
 
         #adjustable parameters
-        self.square_size=3
+        self.square_size=5
         self.line_width=1
-        self.grid_size=3
+        self.grid_size=4
         self.canvas_size=500

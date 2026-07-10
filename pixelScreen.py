@@ -1,7 +1,7 @@
 from PIL import Image
 import pygame
 import numpy as np
-from math import ceil,floor
+from math import ceil,floor,dist
 from simpleUtility import SimpleUtility
 from appSettings import AppSettings
 
@@ -24,10 +24,6 @@ resolution=(grid_size*step+line_width)
 
 grid_scale=canvas_size/resolution
 
-#returns 
-def pixel_to_point(p):
-    return (int((p[0]//grid_scale)),int((p[1]//grid_scale)))
-
 #storing of line data
 #odd values on the last row are irrelevant.
 grid_data=np.full((grid_size*2+1,grid_size+1,3),blank,dtype="uint8")
@@ -38,34 +34,64 @@ image_data=np.full((resolution,
                     resolution
                     ,3),background,dtype="uint8")
 
+def update_image():
+    #horizontal lines
+    global image_data
+    global imageTexture
+    for r in range(1,len(grid_data),2):
+        for c in range(0,len(grid_data[0])):
+            x=((r-1)//2)*(square_size+line_width)+line_width
+            y=(square_size+line_width)*c
+            for i in range(square_size):
+                for j in range(line_width):
+                    image_data[y+j,x+i]=grid_data[r][c]
 
-#horizontal lines
-for r in range(1,len(grid_data),2):
-    for c in range(0,len(grid_data[0])):
-        x=((r-1)//2)*(square_size+line_width)+line_width
-        y=(square_size+line_width)*c
-        for i in range(square_size):
-            for j in range(line_width):
-                image_data[y+j,x+i]=grid_data[r][c]
+    #vertical lines
+    for r in range(0,len(grid_data),2):
+        for c in range(0,len(grid_data[0])-1):
+            x=(r//2)*(square_size+line_width)
+            y=c*(square_size+line_width)+line_width
+            for i in range(line_width):
+                for j in range(square_size):
+                    image_data[y+j,x+i]=grid_data[r][c]
+    
+    img = Image.fromarray(image_data)
 
-#vertical lines
-for r in range(0,len(grid_data),2):
-    for c in range(0,len(grid_data[0])-1):
-        x=(r//2)*(square_size+line_width)
-        y=c*(square_size+line_width)+line_width
-        for i in range(line_width):
-            for j in range(square_size):
-                image_data[y+j,x+i]=grid_data[r][c]
+    img=img.resize((canvas_size,canvas_size),resample=Image.Resampling.NEAREST)
+
+    imageTexture=pygame.image.frombytes(img.tobytes(),(canvas_size,canvas_size),"RGB")
+
+#returns the line at said point
+def pixel_to_point(p):
+    return (int((p[0]//grid_scale)),int((p[1]//grid_scale)))
+
+def get_line_location(coordinate:tuple):
+    if coordinate[0]%2==0:
+        return (coordinate[0]*step,coordinate[1]*step+step/2)
+
+#returns the pixel coordinate at the middle of the line (for distance measuring)
+def line_to_pixel(p:tuple):
+    if p[0]%2==0:
+        #horizontal line
+        return (p[0]/2*step+(line_width/2),
+                p[1]*step+(line_width)+(square_size/2))
+    else:
+        return ((p[0]-1)/2*step+(line_width)+(square_size/2),
+                p[1]*step+(line_width/2))
+
+
+pygame.init()
+canvas = pygame.display.set_mode((canvas_size,canvas_size))
+pygame.display.set_caption("Pixel Void")
+
 
 #this replaces it with random colored pixels (for testing)
 # image_data=(np.random.rand(9,9,3)*255).astype(np.uint8)
 
 
-pygame.init()
 
-canvas = pygame.display.set_mode((canvas_size,canvas_size))
 
-pygame.display.set_caption("Pixel Void")
+
 exit = False
 is_drawing=False
 
@@ -75,11 +101,8 @@ brush_size=1
 while not exit:
     canvas.fill(background)
 
-    img = Image.fromarray(image_data)
+    update_image()
 
-    img=img.resize((canvas_size,canvas_size),resample=Image.Resampling.NEAREST)
-
-    imageTexture=pygame.image.frombytes(img.tobytes(),(canvas_size,canvas_size),"RGB")
 
 
     canvas.blit(imageTexture)
@@ -104,13 +127,12 @@ while not exit:
             
     if is_drawing:
         point = pixel_to_point(draw_location)
-        # point=(point[0]*2//step/2,point[1]*2//step/2)
-        # print(point)
+
+        
+
+        
 
         brush_box=((point[0]-brush_size,point[0]+brush_size),(point[1]-brush_size,point[1]+brush_size))
-
-        # if 0 in [point[0]%step,point[1]%step]:
-        #     print("point!")
         
         
 
@@ -121,16 +143,44 @@ while not exit:
         brush_box = ((floor(brush_box[0][0]/step)*step,ceil(brush_box[0][1]/step)*step),
                      (floor(brush_box[1][0]/step)*step,ceil(brush_box[1][1]/step)*step))
 
+        #convert to index that grid_data uses
         brush_point_box=((brush_box[0][0]//4,brush_box[0][1]//4),
                          (brush_box[1][0]//4,brush_box[1][1]//4))
 
         print(brush_point_box)
 
+        pygame.draw.circle(canvas,(0,255,0),(point[0]*grid_scale,point[1]*grid_scale),8)
 
-        #for testing purposes, it creates points at the furthest ones
-        brush_points=[]
+        #double x values for point box range
+        
+        for x in range(brush_point_box[0][0],brush_point_box[0][1]*2+1):
+            for y in range(brush_point_box[1][0],brush_point_box[1][1]+1):
+                print(x,y)
+                loc=line_to_pixel((x,y))
+                
+                if dist(loc,point)<=brush_size:
+                    pygame.draw.circle(canvas,(255,0,0),(loc[0]*grid_scale,loc[1]*grid_scale),5)
+
+
+
+
+        #old code i left here in case i need to go back to it - did not work
+        # for hline in range(brush_point_box[0][0]*2,brush_point_box[0][1]*2,2):
+        #     for vertical in range(brush_point_box[1][0],brush_point_box[1][1]):
+        #         grid_data[hline][vertical] = blank
+        #         loc=get_line_location((hline,vertical))
+        #         print(hline,vertical)
+        #         pygame.draw.circle(canvas,(255,0,0),(loc[0]*grid_scale,loc[1]*grid_scale),8)
+        
+        # for vline in range(brush_point_box[1][0]*2,brush_point_box[1][1]*2,2):
+        #     for vertical in range(brush_point_box[1][0],brush_point_box[1][1]):
+        #         grid_data[vline+1][vertical] = blank
+        
+
+
         for i in [(0,0),(0,1),(1,1),(1,0)]:
             pygame.draw.circle(canvas,(0,0,255),(brush_box[0][i[0]]*grid_scale,brush_box[1][i[1]]*grid_scale),10)
+        
         
 
 
