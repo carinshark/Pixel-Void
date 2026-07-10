@@ -144,22 +144,25 @@ while not exit:
                      (floor(brush_box[1][0]/step)*step,ceil(brush_box[1][1]/step)*step))
 
         #convert to index that grid_data uses
-        brush_point_box=((brush_box[0][0]//4,brush_box[0][1]//4),
-                         (brush_box[1][0]//4,brush_box[1][1]//4))
+        brush_point_box=((brush_box[0][0]//step,brush_box[0][1]//step),
+                         (brush_box[1][0]//step,brush_box[1][1]//step))
 
         print(brush_point_box)
 
         pygame.draw.circle(canvas,(0,255,0),(point[0]*grid_scale,point[1]*grid_scale),8)
 
-        #double x values for point box range
         
-        for x in range(brush_point_box[0][0],brush_point_box[0][1]*2+1):
-            for y in range(brush_point_box[1][0],brush_point_box[1][1]+1):
-                print(x,y)
+        for x in range(brush_point_box[0][0]*2,brush_point_box[0][1]*2):
+            for y in range(brush_point_box[1][0],brush_point_box[1][1]):
+                # print(x,y)
                 loc=line_to_pixel((x,y))
-                
+                pygame.draw.circle(canvas,(255,0,255),(loc[0]*grid_scale,loc[1]*grid_scale),3)
                 if dist(loc,point)<=brush_size:
                     pygame.draw.circle(canvas,(255,0,0),(loc[0]*grid_scale,loc[1]*grid_scale),5)
+                    if x>=0 and x<len(grid_data) and y>=0 and y<len(grid_data[0]):
+                        # print(len(grid_data))
+                        grid_data[x,y]=background
+
 
 
 

@@ -10,5 +10,5 @@ class AppSettings:
         #adjustable parameters
         self.square_size=5
         self.line_width=1
-        self.grid_size=4
+        self.grid_size=20
         self.canvas_size=500
