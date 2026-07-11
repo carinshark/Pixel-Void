@@ -7,7 +7,7 @@ class AppSettings:
         self.background = np.array((0,0,0))
         self.blank= np.array((255,255,255),dtype="uint8")
 
-        #adjustable parameters
+        #adjustable parameters of canvas
         self.square_size=3
         self.line_width=1
         self.grid_size=20
@@ -16,4 +16,7 @@ class AppSettings:
         #in game settings
         self.color1=self.blank
         self.color2=self.background
-        self.debug_mode=False
+        self.debug_mode=True
+
+        #full ui parameters
+        
