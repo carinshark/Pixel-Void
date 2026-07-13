@@ -31,4 +31,11 @@ class SimpleUtility:
         return np.average(np.array((color1,color2)),0).astype("uint8")
     
 
-
+    #check if item is within startpos and startpos+size
+    def in_range(item:tuple,startPos:tuple,size:tuple):
+        if item[0]<startPos[0] or item[0] > startPos[0]+size[0]:
+            return False
+        elif item[1]<startPos[1] or item[1] > startPos[1]+size[1]:
+            return False
+        else:
+            return True

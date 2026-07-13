@@ -1,4 +1,5 @@
 import numpy as np
+import pygame
 
 class AppSettings:
     
@@ -24,3 +25,5 @@ class AppSettings:
         self.margin=25
         self.pallete_box_size=(255,100)
         self.button_size=(75,25)
+
+        self.main_font=pygame.font.Font("artAssets\GrapeSoda.ttf",size=30)
