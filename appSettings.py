@@ -11,12 +11,16 @@ class AppSettings:
         self.square_size=3
         self.line_width=1
         self.grid_size=20
-        self.canvas_size=500
 
         #in game settings
         self.color1=self.blank
         self.color2=self.background
-        self.debug_mode=True
+        self.debug_mode=False
 
-        #full ui parameters
-        
+        #ui parameters
+        self.window_background_color = np.array((150,200,200))
+        self.window_size=(800,600)
+        self.canvas_size=500
+        self.margin=25
+        self.pallete_box_size=(255,100)
+        self.button_size=(75,25)
