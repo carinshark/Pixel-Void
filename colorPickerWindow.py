@@ -59,11 +59,9 @@ class ColorPickerWindow(pygame.Surface):
                 self.item_pressed=2
 
         if self.is_pressed and self.item_pressed>=0:
-            print(SimpleUtility.limit((pos[0]-74)*2,0,255))
             self.current_color[self.item_pressed] = SimpleUtility.limit((pos[0]-74)*2,0,255)
 
             self.update()
-            print(self.current_color)
 
 
 
@@ -106,7 +104,7 @@ if __name__=="__main__":
             elif event.type==pygame.MOUSEMOTION:
                 if active:
                     window.check_input(event.pos)
-                    
-        canvas.blit(window)
+
+        canvas.blit(window) 
 
         pygame.display.update()

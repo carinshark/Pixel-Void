@@ -4,8 +4,9 @@ import numpy as np
 from math import ceil,floor,dist
 from simpleUtility import SimpleUtility
 from appSettings import AppSettings
+from colorPickerWindow import ColorPickerWindow
 
-
+pygame.init()
 settings = AppSettings()
 
 #colors
@@ -68,6 +69,8 @@ def update_image():
 
     imageTexture=pygame.image.frombytes(img.tobytes(),(canvas_size,canvas_size),"RGB")
 
+
+
 #returns the line at said point
 def pixel_to_point(p):
     return (int((p[0]//grid_scale)),int((p[1]//grid_scale)))
@@ -87,13 +90,27 @@ def line_to_pixel(p:tuple):
                 p[1]*step+(line_width/2))
 
 
-pygame.init()
+
 canvas = pygame.display.set_mode(settings.window_size)
 pygame.display.set_caption("Pixel Void")
 
+color_picker1=ColorPickerWindow(settings.color1,name="Color 1",settings=settings)
+color_picker2=ColorPickerWindow(settings.color2,name="Color 2",settings=settings)
+color_pickerb=ColorPickerWindow(settings.window_background_color,name="Background",settings=settings)
 
-#this replaces it with random colored pixels (for testing)
-# image_data=(np.random.rand(9,9,3)*255).astype(np.uint8)
+#updater has to take in a position input in all of em
+window_inputs=[
+    {"location":(550,25),
+     "updater":color_picker1.check_input},
+     {"location":(550,150),
+     "updater":color_picker2.check_input},
+     {"location":(550,275),
+     "updater":(color_pickerb.check_input)},
+]
+
+
+
+
 
 
 
@@ -107,13 +124,15 @@ draw2=False
 draw_location = (0,0)
 brush_size=1
 
+active_input=None
+
 while not exit:
     canvas.fill(settings.window_background_color)
 
     update_image()
 
-
     canvas.blit(imageTexture,dest=canvas_offset)
+
 
     for event in pygame.event.get():
         if event.type==pygame.QUIT:
@@ -201,16 +220,22 @@ while not exit:
                                     brush_box[1][i[1]]*grid_scale+canvas_offset[1]),
                                    10)
         
-        
 
 
 
 
 
-    pygame.draw.circle(canvas,(0,0,255),
+
+    pygame.draw.circle(canvas,settings.color1,
                        (draw_location[0]+canvas_offset[0],
                         draw_location[1]+canvas_offset[1]),
-                       brush_size*grid_scale,width=5)
+                       brush_size*grid_scale,width=4,
+                       draw_bottom_left=True,draw_top_left=True)
+    pygame.draw.circle(canvas,settings.color2,
+                       (draw_location[0]+canvas_offset[0],
+                        draw_location[1]+canvas_offset[1]),
+                       brush_size*grid_scale,width=4,
+                       draw_bottom_right=True,draw_top_right=True)
     
         
     pygame.display.update()

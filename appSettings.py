@@ -4,6 +4,7 @@ import pygame
 class AppSettings:
     
     def __init__(self):
+        
         #colors
         self.background = np.array((0,0,0))
         self.blank= np.array((255,255,255),dtype="uint8")
@@ -25,5 +26,8 @@ class AppSettings:
         self.margin=25
         self.pallete_box_size=(255,100)
         self.button_size=(75,25)
+
+        self.brush_size=1
+
 
         self.main_font=pygame.font.Font("artAssets\GrapeSoda.ttf",size=30)
