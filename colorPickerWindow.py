@@ -1,7 +1,7 @@
 import pygame
 import numpy as np
 from appSettings import AppSettings
-from simpleUtility import SimpleUtility
+from simpleUtility import in_range,limit
 
 class ColorPickerWindow(pygame.Surface):
     
@@ -51,15 +51,15 @@ class ColorPickerWindow(pygame.Surface):
     def check_input(self,pos):
         if not self.is_pressed:
             self.is_pressed=True
-            if SimpleUtility.in_range(pos,(74,39),(128,10)):
+            if in_range(pos,(74,39),(128,10)):
                 self.item_pressed=0
-            elif SimpleUtility.in_range(pos,(74,53),(128,10)):
+            elif in_range(pos,(74,53),(128,10)):
                 self.item_pressed=1
-            elif SimpleUtility.in_range(pos,(74,67),(128,10)):
+            elif in_range(pos,(74,67),(128,10)):
                 self.item_pressed=2
 
         if self.is_pressed and self.item_pressed>=0:
-            self.current_color[self.item_pressed] = SimpleUtility.limit((pos[0]-74)*2,0,255)
+            self.current_color[self.item_pressed] = limit((pos[0]-74)*2,0,255)
 
             self.update()
 

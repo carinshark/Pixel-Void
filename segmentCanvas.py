@@ -1,7 +1,7 @@
 import pygame
 import numpy as np
 from appSettings import AppSettings
-from simpleUtility import SimpleUtility
+from simpleUtility import limit,mix_colors
 from PIL import Image
 from math import floor,ceil,dist
 
@@ -22,24 +22,25 @@ class SegmentCanvas(pygame.Surface):
 
 
         #calculated variables (not for changing)
-        self.step=line_width+square_size
-        self.resolution=(grid_size*self.step+line_width)
-        self.grid_scale=canvas_size/self.resolution
+        self.step=settings.step
+        self.resolution=settings.resolution
+        self.grid_scale=settings.grid_scale
 
         #storing of line data
         #odd values on the last row are irrelevant.
         self.grid_data=np.full((grid_size*2+1,grid_size+1,3),self.background,dtype="uint8")
 
-        #this converts it into visual pixels based on the parameters given
-        #THIS PART SPECIFICALLY IS COLUMN MAJOR RATHER THAN ROW MAJOR
-        self.image_data=np.full((self.resolution,
-                            self.resolution
-                            ,3),self.background,dtype="uint8")
+        self.current_color=settings.canvas_background_color.copy()
         
         self.draw1=False
         self.draw2=False
 
         self.update_image()
+    
+    def regular_update(self):
+        if not (self.settings.canvas_background_color==self.current_color).all():
+            self.update_image()
+            self.current_color=self.settings.canvas_background_color.copy()
     
     def update_image(self):
         #horizontal lines
@@ -47,6 +48,12 @@ class SegmentCanvas(pygame.Surface):
         line_width=self.settings.line_width
         canvas_size=self.settings.canvas_size
 
+        #this converts it into visual pixels based on the parameters given
+        #THIS PART SPECIFICALLY IS COLUMN MAJOR RATHER THAN ROW MAJOR
+        self.image_data=np.full((self.resolution,
+                            self.resolution
+                            ,3),self.settings.canvas_background_color,dtype="uint8")
+        
         for r in range(1,len(self.grid_data),2):
             for c in range(0,len(self.grid_data[0])):
                 x=((r-1)//2)*(square_size+line_width)+line_width
@@ -85,7 +92,6 @@ class SegmentCanvas(pygame.Surface):
     def draw(self,draw_location):
         if not (self.draw1 or self.draw2):
             return
-        print('test')
 
         settings=self.settings
         brush_size=settings.brush_size
@@ -97,7 +103,7 @@ class SegmentCanvas(pygame.Surface):
         brush_box=((point[0]-brush_size,point[0]+brush_size),(point[1]-brush_size,point[1]+brush_size))
         
         #limit brush to edge of canvas
-        brush_box= SimpleUtility.limit(brush_box,0,self.resolution)
+        brush_box= limit(brush_box,0,self.resolution)
         
         #align to grid
         brush_box = ((floor(brush_box[0][0]/step)*step,ceil(brush_box[0][1]/step)*step),
@@ -111,7 +117,6 @@ class SegmentCanvas(pygame.Surface):
         
         for x in range(brush_point_box[0][0]*2,brush_point_box[0][1]*2):
             for y in range(brush_point_box[1][0],brush_point_box[1][1]):
-                # print(x,y)
                 loc=self.line_to_pixel((x,y))
                 if settings.debug_mode:
                     pygame.draw.circle(self,(255,0,255),
@@ -127,9 +132,8 @@ class SegmentCanvas(pygame.Surface):
                                             5)
 
                     if x>=0 and x<len(self.grid_data) and y>=0 and y<len(self.grid_data[0]):
-                        # print(len(grid_data))
                         if self.draw1 and self.draw2:
-                            self.grid_data[x,y]=SimpleUtility.mix_colors(settings.color1,settings.color2)
+                            self.grid_data[x,y]=mix_colors(settings.color1,settings.color2)
                         elif self.draw1:
                             self.grid_data[x,y]=settings.color1
                         elif self.draw2:
