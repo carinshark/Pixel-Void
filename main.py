@@ -4,6 +4,7 @@ from segmentCanvas import SegmentCanvas
 from colorPickerWindow import ColorPickerWindow
 from appSettings import AppSettings
 from simpleUtility import in_range,subtract,limit
+from colorPalette import ColorPalette
 
 
 
@@ -25,6 +26,8 @@ if __name__=="__main__":
     color_picker2=ColorPickerWindow(settings.color2,name="Color 2",settings=settings)
     color_pickerb=ColorPickerWindow(settings.canvas_background_color,
                                     name="Background",settings=settings)
+    
+    color_palette=ColorPalette(settings)
 
     draw_canvas=SegmentCanvas(settings=settings)    
 
@@ -44,6 +47,11 @@ if __name__=="__main__":
          "lclick":[draw_canvas.check_input_left,draw_canvas.no_input_left],
          "rclick":[draw_canvas.check_input_right,draw_canvas.no_input_right]
          },
+         {
+             "surface":color_palette,
+             "location":(550,400),
+             "lclick":[color_palette.check_input,color_palette.no_input]
+         },
     ]
 
 
@@ -55,7 +63,16 @@ if __name__=="__main__":
     
     while not exit:
         canvas.fill(settings.window_background_color)
-        draw_canvas.regular_update()
+
+        for surf in window_inputs:
+            if "regular_update" in dir(surf["surface"]):
+                
+                surf["surface"].regular_update()
+
+
+
+
+
 
         for surf in window_inputs:
             canvas.blit(surf["surface"],surf["location"])
@@ -89,12 +106,10 @@ if __name__=="__main__":
 
                             break
             elif event.type==pygame.MOUSEBUTTONUP:
-                if event.button==pygame.BUTTON_LEFT:
                 if event.button==pygame.BUTTON_LEFT and activeL!=-1:
                     window_inputs[activeL]["lclick"][1]()
                     activeL=-1
                             
-                elif event.button==pygame.BUTTON_RIGHT:
                 elif event.button==pygame.BUTTON_RIGHT and activeR!=-1:
                     window_inputs[activeR]["rclick"][1]()
                     activeR=-1
@@ -106,7 +121,6 @@ if __name__=="__main__":
                         subtract(event.pos,window_inputs[activeL]["location"]))
                 if activeR>=0:
                     window_inputs[activeR]["rclick"][0](
-                        subtract(event.pos,window_inputs[activeL]["location"]))
                         subtract(event.pos,window_inputs[activeR]["location"]))
             
 

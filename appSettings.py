@@ -13,7 +13,7 @@ class AppSettings:
         self.square_size=3
         self.line_width=1
         self.grid_size=20
-        self.canvas_background_color=np.array((255,255,255),dtype="uint8")
+        self.canvas_background_color=np.array((0,0,0),dtype="uint8")
 
         #in game settings
         self.color1=self.blank
@@ -21,7 +21,7 @@ class AppSettings:
         self.debug_mode=True
 
         #ui parameters
-        self.window_background_color = np.array((150,200,200))
+        self.window_background_color = np.array((23,42,58))
         self.window_size=(800,600)
         self.canvas_size=500
         self.margin=25
@@ -40,4 +40,4 @@ class AppSettings:
 
 
 
-        self.main_font=pygame.font.Font("artAssets\GrapeSoda.ttf",size=30)
+        self.main_font=pygame.font.Font("artAssets/GrapeSoda.ttf",size=30)

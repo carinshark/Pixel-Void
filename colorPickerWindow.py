@@ -26,6 +26,8 @@ class ColorPickerWindow(pygame.Surface):
 
         self.original_color = init_color.copy()
 
+        self.current_color_copy=self.current_color.copy()
+
         self.item_pressed=-1
 
         self.update()
@@ -37,6 +39,11 @@ class ColorPickerWindow(pygame.Surface):
             s.fill(color,((x,0),(1,4)))
         return s
 
+    def regular_update(self):
+        if not (self.current_color==self.current_color_copy).all():
+            self.current_color_copy=self.current_color.copy()
+            self.update()
+            print('ping')
 
     def update(self):
         self.blit(self.background_image)
