@@ -20,7 +20,12 @@ class ColorPickerWindow(pygame.Surface):
             pygame.image.load("artAssets/sliderGreen.png"),
             pygame.image.load("artAssets/sliderBlue.png")
         ]
-        self.is_pressed=False
+
+        self.plus_image=pygame.image.load("artAssets/addToPallete.png")
+        self.reset_image=pygame.image.load("artAssets/resetColor.png")
+
+        self.original_color = init_color.copy()
+
         self.item_pressed=-1
 
         self.update()
@@ -48,8 +53,11 @@ class ColorPickerWindow(pygame.Surface):
 
         self.blit(self.title,dest=(14,3))
 
+        self.blit(self.plus_image,dest=(172,11))
+        self.blit(self.reset_image,dest=(192,11))
+
     def check_input(self,pos):
-        if not self.is_pressed:
+        if self.item_pressed==-1:
             self.is_pressed=True
             if in_range(pos,(74,39),(128,10)):
                 self.item_pressed=0
@@ -57,16 +65,32 @@ class ColorPickerWindow(pygame.Surface):
                 self.item_pressed=1
             elif in_range(pos,(74,67),(128,10)):
                 self.item_pressed=2
+            #other buttons
+            elif in_range(pos,(172,11),(18,18)):
+                self.item_pressed=-2 #pallette button
+            elif in_range(pos,(192,11),(18,18)):
+                self.item_pressed=-3
 
-        if self.is_pressed and self.item_pressed>=0:
+
+        if self.item_pressed>=0:
             self.current_color[self.item_pressed] = limit((pos[0]-74)*2,0,255)
+        
+        #add to pallette
+        elif self.item_pressed==-2:
+            if len(self.settings.saved_colors)<50:
+                self.settings.saved_colors=np.append(self.settings.saved_colors,(self.current_color,),0)
 
-            self.update()
+            #this stops it from doing anything else
+            self.item_pressed=-127
+        elif self.item_pressed==-3:
+            for i in range(3):
+                self.current_color[i]=self.original_color[i]
+
+        self.update()
 
 
 
     def no_input(self):
-        self.is_pressed=False
         self.item_pressed=-1
         
 
@@ -96,6 +120,7 @@ if __name__=="__main__":
             elif event.type==pygame.MOUSEBUTTONDOWN:
                 if event.button==1:
                     active=True
+                    window.check_input(event.pos)
             elif event.type==pygame.MOUSEBUTTONUP:
                 if event.button==1:
                     window.no_input()

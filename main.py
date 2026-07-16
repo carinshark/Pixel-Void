@@ -73,6 +73,10 @@ if __name__=="__main__":
                         if "lclick" in surf.keys() and(
                             in_range(event.pos,surf["location"],surf["surface"].size)):
                             activeL=window_inputs.index(surf)
+
+                            window_inputs[activeL]["lclick"][0](
+                                subtract(event.pos,window_inputs[activeL]["location"]))
+                            
                             break
 
                 elif event.button==pygame.BUTTON_RIGHT:
@@ -80,13 +84,18 @@ if __name__=="__main__":
                         if "rclick" in surf.keys() and(
                             in_range(event.pos,surf["location"],surf["surface"].size)):
                             activeR=window_inputs.index(surf)
+                            window_inputs[activeR]["rclick"][0](
+                                subtract(event.pos,window_inputs[activeR]["location"]))
+
                             break
             elif event.type==pygame.MOUSEBUTTONUP:
                 if event.button==pygame.BUTTON_LEFT:
+                if event.button==pygame.BUTTON_LEFT and activeL!=-1:
                     window_inputs[activeL]["lclick"][1]()
                     activeL=-1
                             
                 elif event.button==pygame.BUTTON_RIGHT:
+                elif event.button==pygame.BUTTON_RIGHT and activeR!=-1:
                     window_inputs[activeR]["rclick"][1]()
                     activeR=-1
 
@@ -98,6 +107,7 @@ if __name__=="__main__":
                 if activeR>=0:
                     window_inputs[activeR]["rclick"][0](
                         subtract(event.pos,window_inputs[activeL]["location"]))
+                        subtract(event.pos,window_inputs[activeR]["location"]))
             
 
             elif event.type==pygame.MOUSEWHEEL: 

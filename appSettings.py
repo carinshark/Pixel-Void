@@ -35,5 +35,9 @@ class AppSettings:
         self.resolution=(self.grid_size*self.step+self.line_width)
         self.grid_scale=self.canvas_size/self.resolution
 
+        self.saved_colors=np.empty((0,3),dtype="uint8")
+        
+
+
 
         self.main_font=pygame.font.Font("artAssets\GrapeSoda.ttf",size=30)
