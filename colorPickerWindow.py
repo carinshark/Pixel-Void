@@ -43,7 +43,6 @@ class ColorPickerWindow(pygame.Surface):
         if not (self.current_color==self.current_color_copy).all():
             self.current_color_copy=self.current_color.copy()
             self.update()
-            print('ping')
 
     def update(self):
         self.blit(self.background_image)

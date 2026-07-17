@@ -4,12 +4,13 @@ from appSettings import AppSettings
 class Button(pygame.Surface):
     def __init__(self,icon:str,settings:AppSettings,
                  function1,function2:function=None):
-        super().__init__((74,25))
+        self.bkg_img=pygame.image.load(icon)
+        super().__init__(self.bkg_img.size)
         self.settings=settings
         self.function1:function=function1
         self.function2:function=function2
 
-        self.bkg_img=pygame.image.load(icon)
+        
 
         self.pressed=False
         self.is_active=False

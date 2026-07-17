@@ -5,8 +5,24 @@ from colorPickerWindow import ColorPickerWindow
 from appSettings import AppSettings
 from simpleUtility import in_range,subtract,limit
 from colorPalette import ColorPalette
+from button import Button
+import numpy as np
 
 
+
+def save():
+    draw_canvas.save_to_file()
+
+
+def load():
+    draw_canvas.load_from_file()
+
+
+def download():
+    draw_canvas.download_image()
+
+def reset():
+    draw_canvas.reset_image()
 
 
 
@@ -26,10 +42,14 @@ if __name__=="__main__":
     color_picker2=ColorPickerWindow(settings.color2,name="Color 2",settings=settings)
     color_pickerb=ColorPickerWindow(settings.canvas_background_color,
                                     name="Background",settings=settings)
-    
     color_palette=ColorPalette(settings)
+    draw_canvas=SegmentCanvas(settings=settings)
+    load_button=Button("artAssets/loadImage.png",settings,load)
+    save_button=Button("artAssets/saveImage.png",settings,save)
+    download_button=Button("artAssets/downloadImage.png",settings,download)
+    reset_button=Button("artAssets/resetCanvas.png",settings,reset)
 
-    draw_canvas=SegmentCanvas(settings=settings)    
+
 
     #updater has to take in a position input in all of em
     window_inputs=[
@@ -52,8 +72,23 @@ if __name__=="__main__":
              "location":(550,400),
              "lclick":[color_palette.check_input,color_palette.no_input]
          },
+         {"surface":load_button,
+          "location":(25,550),
+          "lclick":[load_button.check_input,load_button.no_input]
+          },
+          {"surface":save_button,
+          "location":(125,550),
+          "lclick":[save_button.check_input,save_button.no_input]
+          },
+          {"surface":download_button,
+          "location":(225,550),
+          "lclick":[download_button.check_input,download_button.no_input]
+          },
+          {"surface":reset_button,
+          "location":(325,550),
+          "lclick":[reset_button.check_input,reset_button.no_input]
+          },
     ]
-
 
 
     exit=False

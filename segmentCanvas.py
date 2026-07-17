@@ -5,6 +5,9 @@ from simpleUtility import limit,mix_colors
 from PIL import Image
 from math import floor,ceil,dist
 
+from tkinter import Tk,filedialog
+from tkinter.messagebox import askyesno
+
 class SegmentCanvas(pygame.Surface):
     def __init__(self, settings:AppSettings):
         super().__init__((settings.canvas_size,settings.canvas_size))
@@ -37,6 +40,93 @@ class SegmentCanvas(pygame.Surface):
 
         self.update_image()
     
+    def load_from_file(self):
+        root=Tk()
+        root.withdraw()
+
+        path = filedialog.askopenfile(mode="rb",defaultextension="npz",filetypes=[("Numpy File","npz")])
+
+        try:
+            if path:
+                a=np.load(path,allow_pickle=False)
+                
+
+
+                self.settings.saved_colors=a["palette"]
+                self.grid_data=a["grid"]
+
+                for i in range(3):
+                    self.settings.color1[i]=a["color1"][i]
+                for i in range(3):
+                    self.settings.color2[i]=a["color2"][i]
+                for i in range(3):
+                    self.settings.canvas_background_color[i]=a["colorb"][i]
+
+                self.update_image()
+        except KeyError:
+            pass
+
+        finally:
+            root.destroy()
+
+    def save_to_file(self):
+        root=Tk()
+        root.withdraw()
+        #prompt file
+        path = filedialog.asksaveasfile(mode="wb",defaultextension="npz",filetypes=[("Numpy File","npz")])
+        #save to location
+
+        try:
+            if path:
+                np.savez(path,allow_pickle=False,
+                         grid=self.grid_data,
+                         palette=self.settings.saved_colors,
+                         color1=self.settings.color1,
+                         color2=self.settings.color2,
+                         colorb=self.settings.canvas_background_color
+                         )
+
+        finally:
+            root.destroy()
+        
+
+    def reset_image(self):
+        root=Tk()
+        root.withdraw()
+        response=askyesno(title="Confirm Reset",
+                          message="Are you sure you want reset everything?")
+
+
+        if response:
+            self.grid_data=np.full((
+                self.settings.grid_size*2+1,
+                self.settings.grid_size+1,3),
+                self.background,dtype="uint8")
+            self.update_image()
+        
+
+
+
+
+    def download_image(self):
+
+        root=Tk()
+        root.withdraw()
+        path = filedialog.asksaveasfile(
+            mode="wb",defaultextension="jpg",
+            filetypes=[("jpg Image","*.jpg"),("PNG Image","*.png")])
+
+        #save to location
+        try:
+            if path:
+                self.display_img.save(path)
+
+        finally:
+            root.destroy()
+        
+
+
+
     def regular_update(self):
         if not (self.settings.canvas_background_color==self.current_color).all():
             self.update_image()
@@ -73,10 +163,13 @@ class SegmentCanvas(pygame.Surface):
         
         img = Image.fromarray(self.image_data)
 
-        img=img.resize((canvas_size,canvas_size),resample=Image.Resampling.NEAREST)
+        self.display_img=img.resize((canvas_size,canvas_size),resample=Image.Resampling.NEAREST)
 
-        self.blit(pygame.image.frombytes(img.tobytes(),(canvas_size,canvas_size),"RGB"))
-    
+        self.blit(pygame.image.frombytes(
+            self.display_img.tobytes()
+            ,(canvas_size,canvas_size),"RGB"))
+
+
     def check_input_left(self,pos):
         self.draw1=True
         self.draw(pos)
