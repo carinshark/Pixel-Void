@@ -12,7 +12,7 @@ class AppSettings:
         #adjustable parameters of canvas
         self.square_size=3
         self.line_width=1
-        self.grid_size=20
+        self.grid_size=10
         self.canvas_background_color=np.array((0,0,0),dtype="uint8")
 
         #in game settings
@@ -28,12 +28,10 @@ class AppSettings:
         self.pallete_box_size=(255,100)
         self.button_size=(75,25)
         self.brush_size=1
-
+        
 
         #calculated parameters
-        self.step=self.line_width+self.square_size
-        self.resolution=(self.grid_size*self.step+self.line_width)
-        self.grid_scale=self.canvas_size/self.resolution
+        self.calculate_parameters()
 
         self.saved_colors=np.empty((0,3),dtype="uint8")
         
@@ -41,3 +39,8 @@ class AppSettings:
 
 
         self.main_font=pygame.font.Font("artAssets/GrapeSoda.ttf",size=30)
+
+    def calculate_parameters(self):
+        self.step=self.line_width+self.square_size
+        self.resolution=(self.grid_size*self.step+self.line_width)
+        self.grid_scale=self.canvas_size/self.resolution

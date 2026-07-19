@@ -67,8 +67,8 @@ class ColorPalette(pygame.Surface):
     def check_input(self,pos:tuple):
         if self.open_prompt==-1:
             for i in range(len(self.settings.saved_colors)):
-                x=(i%10)*18
-                y=(i//10)*18
+                x=(i%10)*18+6
+                y=(i//10)*18+6
                 if in_range(pos,(x,y),(16,16)):
                     self.open_prompt=i
                     self.update()

@@ -17,21 +17,12 @@ class SegmentCanvas(pygame.Surface):
         self.background = settings.background
         self.blank= settings.blank
 
-        #adjustable parameters
-        square_size=settings.square_size
-        line_width=settings.line_width
-        grid_size=settings.grid_size
-        canvas_size=settings.canvas_size
 
 
-        #calculated variables (not for changing)
-        self.step=settings.step
-        self.resolution=settings.resolution
-        self.grid_scale=settings.grid_scale
 
         #storing of line data
         #odd values on the last row are irrelevant.
-        self.grid_data=np.full((grid_size*2+1,grid_size+1,3),self.background,dtype="uint8")
+        self.grid_data=np.full((settings.grid_size*2+1,settings.grid_size+1,3),self.background,dtype="uint8")
 
         self.current_color=settings.canvas_background_color.copy()
         
@@ -39,6 +30,8 @@ class SegmentCanvas(pygame.Surface):
         self.draw2=False
 
         self.update_image()
+    
+
     
     def load_from_file(self):
         root=Tk()
@@ -62,6 +55,11 @@ class SegmentCanvas(pygame.Surface):
                 for i in range(3):
                     self.settings.canvas_background_color[i]=a["colorb"][i]
 
+                self.settings.grid_size=a["grid_size"]
+                self.settings.square_size=a["square_size"]
+
+                self.settings.calculate_parameters()
+
                 self.update_image()
         except KeyError:
             pass
@@ -83,7 +81,9 @@ class SegmentCanvas(pygame.Surface):
                          palette=self.settings.saved_colors,
                          color1=self.settings.color1,
                          color2=self.settings.color2,
-                         colorb=self.settings.canvas_background_color
+                         colorb=self.settings.canvas_background_color,
+                         grid_size=self.settings.grid_size,
+                         square_size=self.settings.square_size
                          )
 
         finally:
@@ -140,8 +140,8 @@ class SegmentCanvas(pygame.Surface):
 
         #this converts it into visual pixels based on the parameters given
         #THIS PART SPECIFICALLY IS COLUMN MAJOR RATHER THAN ROW MAJOR
-        self.image_data=np.full((self.resolution,
-                            self.resolution
+        self.image_data=np.full((self.settings.resolution,
+                            self.settings.resolution
                             ,3),self.settings.canvas_background_color,dtype="uint8")
         
         for r in range(1,len(self.grid_data),2):
@@ -188,7 +188,7 @@ class SegmentCanvas(pygame.Surface):
 
         settings=self.settings
         brush_size=settings.brush_size
-        step=self.step
+        step=self.settings.step
         
             
         point = self.pixel_to_point(draw_location)
@@ -196,7 +196,7 @@ class SegmentCanvas(pygame.Surface):
         brush_box=((point[0]-brush_size,point[0]+brush_size),(point[1]-brush_size,point[1]+brush_size))
         
         #limit brush to edge of canvas
-        brush_box= limit(brush_box,0,self.resolution)
+        brush_box= limit(brush_box,0,self.settings.resolution)
         
         #align to grid
         brush_box = ((floor(brush_box[0][0]/step)*step,ceil(brush_box[0][1]/step)*step),
@@ -213,15 +213,15 @@ class SegmentCanvas(pygame.Surface):
                 loc=self.line_to_pixel((x,y))
                 if settings.debug_mode:
                     pygame.draw.circle(self,(255,0,255),
-                                    (loc[0]*self.grid_scale,
-                                        loc[1]*self.grid_scale)
+                                    (loc[0]*self.settings.grid_scale,
+                                        loc[1]*self.settings.grid_scale)
                                         ,3)
 
                 if dist(loc,point)<=brush_size:
                     if settings.debug_mode:
                         pygame.draw.circle(self,(255,0,0),
-                                        (loc[0]*self.grid_scale,
-                                            loc[1]*self.grid_scale),
+                                        (loc[0]*self.settings.grid_scale,
+                                            loc[1]*self.settings.grid_scale),
                                             5)
 
                     if x>=0 and x<len(self.grid_data) and y>=0 and y<len(self.grid_data[0]):
@@ -238,29 +238,29 @@ class SegmentCanvas(pygame.Surface):
 
         if settings.debug_mode:
             pygame.draw.circle(self,(0,255,0),
-                            (point[0]*self.grid_scale,
-                                point[1]*self.grid_scale),
+                            (point[0]*self.settings.grid_scale,
+                                point[1]*self.settings.grid_scale),
                                 8)
             for i in [(0,0),(0,1),(1,1),(1,0)]:
                 pygame.draw.circle(self,(0,0,255),
-                                (brush_box[0][i[0]]*self.grid_scale,
-                                    brush_box[1][i[1]]*self.grid_scale),
+                                (brush_box[0][i[0]]*self.settings.grid_scale,
+                                    brush_box[1][i[1]]*self.settings.grid_scale),
                                 10)
         self.update_image()
     
     #returns the line at said point
     def pixel_to_point(self,p):
-        grid_scale=self.grid_scale
+        grid_scale=self.settings.grid_scale
         return (int((p[0]//grid_scale)),int((p[1]//grid_scale)))
 
     def get_line_location(self,coordinate:tuple):
-        step=self.step
+        step=self.settings.step
         if coordinate[0]%2==0:
             return (coordinate[0]*step,coordinate[1]*step+step/2)
 
     #returns the pixel coordinate at the middle of the line (for distance measuring)
     def line_to_pixel(self,p:tuple):
-        step=self.step
+        step=self.settings.step
         line_width=self.settings.line_width
         square_size=self.settings.square_size
         if p[0]%2==0:
