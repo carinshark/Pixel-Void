@@ -8,6 +8,8 @@ from colorPalette import ColorPalette
 from button import Button
 from incrementer import Incrementer
 import numpy as np
+from tkinter import Tk
+from tkinter.messagebox import askyesno
 
 
 
@@ -23,7 +25,18 @@ def download():
     draw_canvas.download_image()
 
 def reset():
-    draw_canvas.reset_image()
+    root=Tk()
+    root.withdraw()
+    response=askyesno(title="Confirm Reset",
+                        message="Are you sure you want reset everything?")
+
+
+    if response:
+        settings.grid_size=grid_inc.value
+        settings.square_size=line_inc.value
+        settings.calculate_parameters()
+        draw_canvas.reset_image()
+    root.destroy()
 
 
 
@@ -176,7 +189,7 @@ if __name__=="__main__":
 
             elif event.type==pygame.MOUSEWHEEL: 
                 settings.brush_size+=event.y/2
-                settings.brush_size=limit(settings.brush_size,.5,settings.grid_size*2+1)
+                settings.brush_size=limit(settings.brush_size,.5,settings.step*settings.grid_size/2)
 
         
 

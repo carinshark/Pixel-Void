@@ -6,7 +6,6 @@ from PIL import Image
 from math import floor,ceil,dist
 
 from tkinter import Tk,filedialog
-from tkinter.messagebox import askyesno
 
 class SegmentCanvas(pygame.Surface):
     def __init__(self, settings:AppSettings):
@@ -91,18 +90,13 @@ class SegmentCanvas(pygame.Surface):
         
 
     def reset_image(self):
-        root=Tk()
-        root.withdraw()
-        response=askyesno(title="Confirm Reset",
-                          message="Are you sure you want reset everything?")
-
-
-        if response:
-            self.grid_data=np.full((
-                self.settings.grid_size*2+1,
-                self.settings.grid_size+1,3),
-                self.background,dtype="uint8")
-            self.update_image()
+        
+        self.grid_data=np.full((
+            self.settings.grid_size*2+1,
+            self.settings.grid_size+1,3),
+            self.background,dtype="uint8")
+        self.update_image()
+        
         
 
 
