@@ -18,7 +18,7 @@ class AppSettings:
         #in game settings
         self.color1=self.blank
         self.color2=self.background
-        self.debug_mode=True
+        self.debug_mode=False
 
         #ui parameters
         self.window_background_color = np.array((23,42,58))

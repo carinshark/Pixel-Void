@@ -28,6 +28,11 @@ class SegmentCanvas(pygame.Surface):
         self.draw1=False
         self.draw2=False
 
+        self.debug_overlay=pygame.Surface((settings.canvas_size,settings.canvas_size),flags=pygame.SRCALPHA)
+
+        
+
+
         self.update_image()
     
 
@@ -159,9 +164,13 @@ class SegmentCanvas(pygame.Surface):
 
         self.display_img=img.resize((canvas_size,canvas_size),resample=Image.Resampling.NEAREST)
 
+
         self.blit(pygame.image.frombytes(
             self.display_img.tobytes()
             ,(canvas_size,canvas_size),"RGB"))
+        
+        if self.settings.debug_mode:
+            self.blit(self.debug_overlay)
 
 
     def check_input_left(self,pos):
@@ -177,6 +186,9 @@ class SegmentCanvas(pygame.Surface):
         self.draw2=False
 
     def draw(self,draw_location):
+        if self.settings.debug_mode:
+                    self.debug_overlay.fill((0,0,0,0))
+        
         if not (self.draw1 or self.draw2):
             return
 
@@ -206,14 +218,14 @@ class SegmentCanvas(pygame.Surface):
             for y in range(brush_point_box[1][0],brush_point_box[1][1]):
                 loc=self.line_to_pixel((x,y))
                 if settings.debug_mode:
-                    pygame.draw.circle(self,(255,0,255),
+                    pygame.draw.circle(self.debug_overlay,(255,0,255),
                                     (loc[0]*self.settings.grid_scale,
                                         loc[1]*self.settings.grid_scale)
                                         ,3)
 
                 if dist(loc,point)<=brush_size:
                     if settings.debug_mode:
-                        pygame.draw.circle(self,(255,0,0),
+                        pygame.draw.circle(self.debug_overlay,(255,0,0),
                                         (loc[0]*self.settings.grid_scale,
                                             loc[1]*self.settings.grid_scale),
                                             5)
@@ -231,12 +243,12 @@ class SegmentCanvas(pygame.Surface):
 
 
         if settings.debug_mode:
-            pygame.draw.circle(self,(0,255,0),
+            pygame.draw.circle(self.debug_overlay,(0,255,0),
                             (point[0]*self.settings.grid_scale,
                                 point[1]*self.settings.grid_scale),
                                 8)
             for i in [(0,0),(0,1),(1,1),(1,0)]:
-                pygame.draw.circle(self,(0,0,255),
+                pygame.draw.circle(self.debug_overlay,(0,0,255),
                                 (brush_box[0][i[0]]*self.settings.grid_scale,
                                     brush_box[1][i[1]]*self.settings.grid_scale),
                                 10)

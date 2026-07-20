@@ -3,7 +3,7 @@ from appSettings import AppSettings
 
 class Button(pygame.Surface):
     def __init__(self,icon:str,settings:AppSettings,
-                 function1,function2:function=None):
+                 function1,function2:function=None,icon2:str=None):
         self.bkg_img=pygame.image.load(icon)
         super().__init__(self.bkg_img.size)
         self.settings=settings
@@ -17,10 +17,16 @@ class Button(pygame.Surface):
         
         self.toggle=True if self.function2 else False
 
+        self.bkg_img2=pygame.image.load(icon2) if icon2 else None
+
         self.update()
 
     def update(self):
-        self.blit(self.bkg_img)
+        if self.bkg_img2 and self.is_active:
+            self.blit(self.bkg_img2)
+        else:
+            self.blit(self.bkg_img)
+        
 
     def check_input(self,pos):
         if self.pressed:
@@ -30,9 +36,11 @@ class Button(pygame.Surface):
             self.function1()
             if self.toggle:
                 self.is_active=True
+            self.update()
         else:
             self.function2()
             self.is_active=False
+            self.update()
             
 
     def no_input(self):
@@ -46,7 +54,7 @@ if __name__=="__main__":
     def command2():
         print("unclick")
     
-    window = Button("artAssets/downloadImage.png",AppSettings(),testCommand,command2)
+    window = Button("artAssets/downloadImage.png",AppSettings(),testCommand,command2,"artAssets/saveImage.png")
     canvas = pygame.display.set_mode(window.size)
     exit=False
     active=False

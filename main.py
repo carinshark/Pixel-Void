@@ -10,6 +10,7 @@ from incrementer import Incrementer
 import numpy as np
 from tkinter import Tk
 from tkinter.messagebox import askyesno
+from webbrowser import open as open_url
 
 
 
@@ -38,6 +39,13 @@ def reset():
         draw_canvas.reset_image()
     root.destroy()
 
+def enable_debug(): 
+    settings.debug_mode=True
+def disable_debug():
+    settings.debug_mode=False
+def open_help():
+    open_url("https://raw.githubusercontent.com/user/repo/main/README.md")
+
 
 
 if __name__=="__main__":
@@ -50,7 +58,7 @@ if __name__=="__main__":
 
     
 
-    
+    background_img=pygame.image.load("artAssets/backgroundLines.png")
 
     color_picker1=ColorPickerWindow(settings.color1,name="Color 1",settings=settings)
     color_picker2=ColorPickerWindow(settings.color2,name="Color 2",settings=settings)
@@ -65,12 +73,21 @@ if __name__=="__main__":
     grid_inc=Incrementer(4,30,settings.grid_size,"grids",settings)
     line_inc=Incrementer(2,6,settings.square_size,"length",settings)
 
+    debug_button=Button("artAssets/debugOff.png",settings,
+                        enable_debug,disable_debug,"artAssets/debugOn.png")
+    
+    help_button=Button("artAssets/helpButton.png",settings,open_help)
+
     settings_decal=pygame.image.load("artAssets/settingsDecal.png")
+    carinshark_decal=pygame.image.load("artAssets/carinsharkDecal.png")
+
 
 
 
     #updater has to take in a position input in all of em
     window_inputs=[
+        {"surface":background_img,
+         "location":(0,0)},
         {"surface":color_picker1,
          "location":(550,25),
         "lclick":[color_picker1.check_input,color_picker1.no_input]},
@@ -116,6 +133,15 @@ if __name__=="__main__":
           },
           {"surface":settings_decal,
            "location":(625,525)},
+           {"surface":carinshark_decal,
+            "location":(425,550)},
+            {"surface":debug_button,
+             "location":(325,550),
+             "lclick":[debug_button.check_input,debug_button.no_input]},
+             {"surface":help_button,
+             "location":(375,550),
+             "lclick":[help_button.check_input,help_button.no_input]},
+        
     ]
 
 
