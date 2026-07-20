@@ -13,7 +13,7 @@ class ColorPalette(pygame.Surface):
 
         self.title_img=pygame.Surface((30,100),flags=pygame.SRCALPHA)
 
-        t_color=(120,107,223)
+        t_color=settings.main_text_color
         letter_add=settings.main_font.render
         name="Palette"
         

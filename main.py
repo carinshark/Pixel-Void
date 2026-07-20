@@ -44,7 +44,7 @@ def enable_debug():
 def disable_debug():
     settings.debug_mode=False
 def open_help():
-    open_url("https://raw.githubusercontent.com/user/repo/main/README.md")
+    open_url("https://github.com/carinshark/Pixel-Void/blob/main/README.md")
 
 
 

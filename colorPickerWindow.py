@@ -13,7 +13,7 @@ class ColorPickerWindow(pygame.Surface):
         self.background_image=pygame.image.load("artAssets/colorPickerBackground.png")
         self.color_display=pygame.Surface((38,38))
 
-        self.title=self.settings.main_font.render(name,False,(120,107,223))
+        self.title=self.settings.main_font.render(name,False,settings.main_text_color)
 
         self.sliders=[
             pygame.image.load("artAssets/sliderRed.png"),

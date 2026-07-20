@@ -12,13 +12,13 @@ class Incrementer(pygame.Surface):
         self.max=max
         self.value=current_val
 
-        self.title_img=settings.main_font.render(title,False,(125,192,255))
+        self.title_img=settings.main_font.render(title,False,settings.main_text_color)
         self.pressed=False
 
         self.update()
 
     def update(self):
-        num=self.settings.main_font.render(str(self.value),False,(125,192,255))
+        num=self.settings.main_font.render(str(self.value),False,self.settings.main_text_color)
 
         
         self.blit(self.background_img)
