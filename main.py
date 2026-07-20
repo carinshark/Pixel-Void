@@ -6,6 +6,7 @@ from appSettings import AppSettings
 from simpleUtility import in_range,subtract,limit
 from colorPalette import ColorPalette
 from button import Button
+from incrementer import Incrementer
 import numpy as np
 
 
@@ -48,6 +49,10 @@ if __name__=="__main__":
     save_button=Button("artAssets/saveImage.png",settings,save)
     download_button=Button("artAssets/downloadImage.png",settings,download)
     reset_button=Button("artAssets/resetCanvas.png",settings,reset)
+    grid_inc=Incrementer(4,30,settings.grid_size,"grids",settings)
+    line_inc=Incrementer(2,6,settings.square_size,"length",settings)
+
+    settings_decal=pygame.image.load("artAssets/settingsDecal.png")
 
 
 
@@ -85,9 +90,19 @@ if __name__=="__main__":
           "lclick":[download_button.check_input,download_button.no_input]
           },
           {"surface":reset_button,
-          "location":(325,550),
+          "location":(625,550),
           "lclick":[reset_button.check_input,reset_button.no_input]
           },
+          {"surface":line_inc,
+          "location":(550,525),
+          "lclick":[line_inc.check_input,line_inc.no_input]
+          },
+          {"surface":grid_inc,
+          "location":(700,525),
+          "lclick":[grid_inc.check_input,grid_inc.no_input]
+          },
+          {"surface":settings_decal,
+           "location":(625,525)},
     ]
 
 
