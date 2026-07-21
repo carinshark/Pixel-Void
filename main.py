@@ -56,7 +56,9 @@ if __name__=="__main__":
     canvas.fill(settings.window_background_color)
     pygame.display.set_caption("Pixel Void")
 
-    
+    pygame.display.set_icon(pygame.image.load(
+        "artAssets/PixelVoidIcon.png"
+    ))
 
     background_img=pygame.image.load("artAssets/backgroundLines.png")
 
