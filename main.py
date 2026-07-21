@@ -57,10 +57,10 @@ if __name__=="__main__":
     pygame.display.set_caption("Pixel Void")
 
     pygame.display.set_icon(pygame.image.load(
-        "artAssets/PixelVoidIcon.png"
+        settings.file_path+"artAssets/PixelVoidIcon.png"
     ))
 
-    background_img=pygame.image.load("artAssets/backgroundLines.png")
+    background_img=pygame.image.load(settings.file_path+"artAssets/backgroundLines.png")
 
     color_picker1=ColorPickerWindow(settings.color1,name="Color 1",settings=settings)
     color_picker2=ColorPickerWindow(settings.color2,name="Color 2",settings=settings)
@@ -68,20 +68,20 @@ if __name__=="__main__":
                                     name="Background",settings=settings)
     color_palette=ColorPalette(settings)
     draw_canvas=SegmentCanvas(settings=settings)
-    load_button=Button("artAssets/loadImage.png",settings,load)
-    save_button=Button("artAssets/saveImage.png",settings,save)
-    download_button=Button("artAssets/downloadImage.png",settings,download)
-    reset_button=Button("artAssets/resetCanvas.png",settings,reset)
+    load_button=Button(settings.file_path+"artAssets/loadImage.png",settings,load)
+    save_button=Button(settings.file_path+"artAssets/saveImage.png",settings,save)
+    download_button=Button(settings.file_path+"artAssets/downloadImage.png",settings,download)
+    reset_button=Button(settings.file_path+"artAssets/resetCanvas.png",settings,reset)
     grid_inc=Incrementer(4,30,settings.grid_size,"grids",settings)
     line_inc=Incrementer(2,6,settings.square_size,"length",settings)
 
-    debug_button=Button("artAssets/debugOff.png",settings,
-                        enable_debug,disable_debug,"artAssets/debugOn.png")
+    debug_button=Button(settings.file_path+"artAssets/debugOff.png",settings,
+                        enable_debug,disable_debug,settings.file_path+"artAssets/debugOn.png")
     
-    help_button=Button("artAssets/helpButton.png",settings,open_help)
+    help_button=Button(settings.file_path+"artAssets/helpButton.png",settings,open_help)
 
-    settings_decal=pygame.image.load("artAssets/settingsDecal.png")
-    carinshark_decal=pygame.image.load("artAssets/carinsharkDecal.png")
+    settings_decal=pygame.image.load(settings.file_path+"artAssets/settingsDecal.png")
+    carinshark_decal=pygame.image.load(settings.file_path+"artAssets/carinsharkDecal.png")
 
 
 

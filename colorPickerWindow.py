@@ -10,19 +10,19 @@ class ColorPickerWindow(pygame.Surface):
         self.current_color=init_color
         self.settings=settings
 
-        self.background_image=pygame.image.load("artAssets/colorPickerBackground.png")
+        self.background_image=pygame.image.load(settings.file_path+"artAssets/colorPickerBackground.png")
         self.color_display=pygame.Surface((38,38))
 
         self.title=self.settings.main_font.render(name,False,settings.main_text_color)
 
         self.sliders=[
-            pygame.image.load("artAssets/sliderRed.png"),
-            pygame.image.load("artAssets/sliderGreen.png"),
-            pygame.image.load("artAssets/sliderBlue.png")
+            pygame.image.load(settings.file_path+"artAssets/sliderRed.png"),
+            pygame.image.load(settings.file_path+"artAssets/sliderGreen.png"),
+            pygame.image.load(settings.file_path+"artAssets/sliderBlue.png")
         ]
 
-        self.plus_image=pygame.image.load("artAssets/addToPallete.png")
-        self.reset_image=pygame.image.load("artAssets/resetColor.png")
+        self.plus_image=pygame.image.load(settings.file_path+"artAssets/addToPallete.png")
+        self.reset_image=pygame.image.load(settings.file_path+"artAssets/resetColor.png")
 
         self.original_color = init_color.copy()
 

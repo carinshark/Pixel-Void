@@ -1,5 +1,6 @@
 import numpy as np
 import pygame
+from os import path
 
 class AppSettings:
     
@@ -38,7 +39,11 @@ class AppSettings:
 
         self.main_text_color=np.array((125,192,255),dtype="uint8")
 
-        self.main_font=pygame.font.Font("artAssets/GrapeSoda.ttf",size=30)
+        self.file_path=path.abspath(path.dirname(__file__))+"/"
+
+        self.main_font=pygame.font.Font(self.file_path+"artAssets/GrapeSoda.ttf",size=30)
+
+        
 
     def calculate_parameters(self):
         self.step=self.line_width+self.square_size

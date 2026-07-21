@@ -7,7 +7,7 @@ class Incrementer(pygame.Surface):
         super().__init__((75,50))
         self.settings=settings
         
-        self.background_img=pygame.image.load("artAssets/IncrementUI.png")
+        self.background_img=pygame.image.load(settings.file_path+"artAssets/IncrementUI.png")
         self.min=min
         self.max=max
         self.value=current_val

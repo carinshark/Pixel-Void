@@ -9,7 +9,7 @@ class ColorPalette(pygame.Surface):
         super().__init__((225,100))
         self.settings=settings
 
-        self.background_img=pygame.image.load("artAssets/basicFrame.png")
+        self.background_img=pygame.image.load(settings.file_path+"artAssets/basicFrame.png")
 
         self.title_img=pygame.Surface((30,100),flags=pygame.SRCALPHA)
 
@@ -23,8 +23,8 @@ class ColorPalette(pygame.Surface):
             self.title_img.blit(letter_add(name[i],False,t_color),dest=(x,y))
 
         self.palette_visual=pygame.Surface((196,88),flags=pygame.SRCALPHA)
-        self.blank_palette_img=pygame.image.load("artAssets/emptyPallette.png")
-        self.prompt_img=pygame.image.load("artAssets/palletteOverlay.png")
+        self.blank_palette_img=pygame.image.load(settings.file_path+"artAssets/emptyPallette.png")
+        self.prompt_img=pygame.image.load(settings.file_path+"artAssets/palletteOverlay.png")
 
         self.open_prompt=-1
 
