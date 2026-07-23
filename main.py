@@ -66,7 +66,9 @@ if __name__=="__main__":
     pygame.init()
     
     settings=AppSettings()
-    canvas = pygame.display.set_mode(settings.window_size)
+    canvas = pygame.display.set_mode(settings.window_size,pygame.SCALED)
+
+    clock = pygame.Clock()
     canvas.fill(settings.window_background_color)
     pygame.display.set_caption("Pixel Void")
 
@@ -170,10 +172,6 @@ if __name__=="__main__":
                 surf["surface"].regular_update()
 
 
-
-
-
-
         for surf in window_inputs:
             canvas.blit(surf["surface"],surf["location"])
 
@@ -257,5 +255,7 @@ if __name__=="__main__":
                             settings.brush_size*settings.grid_scale,width=4,
                             draw_bottom_right=True,draw_top_right=True)
         
-
+        
         pygame.display.update()
+
+        clock.tick(settings.framerate)

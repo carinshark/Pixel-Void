@@ -45,6 +45,8 @@ class AppSettings:
 
         self.maximum_undos=32
 
+        self.framerate=60
+
         
 
     def calculate_parameters(self):
