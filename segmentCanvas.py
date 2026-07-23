@@ -30,10 +30,11 @@ class SegmentCanvas(pygame.Surface):
 
         self.debug_overlay=pygame.Surface((settings.canvas_size,settings.canvas_size),flags=pygame.SRCALPHA)
 
-        
-
+        self.previous_states=[]
+        self.current_state=0
 
         self.update_image()
+        self.save_state()
     
 
     
@@ -102,11 +103,7 @@ class SegmentCanvas(pygame.Surface):
             self.background,dtype="uint8")
         self.update_image()
         
-        
-
-
-
-
+   
     def download_image(self):
 
         root=Tk()
@@ -179,11 +176,32 @@ class SegmentCanvas(pygame.Surface):
     
     def no_input_left(self):
         self.draw1=False
+        self.save_state()
     def check_input_right(self,pos):
         self.draw2=True
         self.draw(pos)
     def no_input_right(self):
         self.draw2=False
+        self.save_state()
+
+    def save_state(self):
+        if not (self.draw1 or self.draw2):
+            self.previous_states=self.previous_states[:self.current_state+1]
+            self.previous_states.append(self.grid_data.copy())
+            self.current_state=len(self.previous_states)-1
+
+
+    def undo(self):
+        if self.current_state>0:
+            self.current_state-=1
+            self.grid_data=self.previous_states[self.current_state].copy()
+            self.update_image()
+    def redo(self):
+        if self.current_state<len(self.previous_states)-1 and len(self.previous_states)>0:
+            self.current_state+=1
+            self.grid_data=self.previous_states[self.current_state].copy()
+            self.update_image()
+
 
     def draw(self,draw_location):
         if self.settings.debug_mode:

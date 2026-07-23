@@ -39,13 +39,27 @@ def reset():
         draw_canvas.reset_image()
     root.destroy()
 
-def enable_debug(): 
-    settings.debug_mode=True
-def disable_debug():
-    settings.debug_mode=False
+
 def open_help():
     open_url("https://github.com/carinshark/Pixel-Void/blob/main/README.md")
+def undo():
+    draw_canvas.undo()
+def redo():
+    draw_canvas.redo()
+def debug_mode():
+    settings.debug_mode=not settings.debug_mode
 
+def leave_app():
+    global exit
+    root=Tk()
+    root.withdraw()
+    response=askyesno(title="Confirm Exit",
+                        message="Are you sure you want to leave the app?")
+
+
+    if response:
+        exit=True
+    root.destroy()
 
 
 if __name__=="__main__":
@@ -75,15 +89,12 @@ if __name__=="__main__":
     grid_inc=Incrementer(4,30,settings.grid_size,"grids",settings)
     line_inc=Incrementer(2,6,settings.square_size,"length",settings)
 
-    debug_button=Button(settings.file_path+"artAssets/debugOff.png",settings,
-                        enable_debug,disable_debug,settings.file_path+"artAssets/debugOn.png")
     
     help_button=Button(settings.file_path+"artAssets/helpButton.png",settings,open_help)
 
-    settings_decal=pygame.image.load(settings.file_path+"artAssets/settingsDecal.png")
     carinshark_decal=pygame.image.load(settings.file_path+"artAssets/carinsharkDecal.png")
 
-
+    undo_button=Button(settings.file_path+"artAssets/undoButton.png",settings,undo)
 
 
     #updater has to take in a position input in all of em
@@ -122,7 +133,7 @@ if __name__=="__main__":
           "lclick":[download_button.check_input,download_button.no_input]
           },
           {"surface":reset_button,
-          "location":(625,550),
+          "location":(625,525),
           "lclick":[reset_button.check_input,reset_button.no_input]
           },
           {"surface":line_inc,
@@ -133,16 +144,14 @@ if __name__=="__main__":
           "location":(700,525),
           "lclick":[grid_inc.check_input,grid_inc.no_input]
           },
-          {"surface":settings_decal,
-           "location":(625,525)},
-           {"surface":carinshark_decal,
-            "location":(425,550)},
-            {"surface":debug_button,
-             "location":(325,550),
-             "lclick":[debug_button.check_input,debug_button.no_input]},
              {"surface":help_button,
              "location":(375,550),
              "lclick":[help_button.check_input,help_button.no_input]},
+             {"surface":undo_button,
+              "location":(325,550),
+              "lclick":[undo_button.check_input,undo_button.no_input]},
+              {"surface":carinshark_decal,
+               "location":(425,550)}
         
     ]
 
@@ -168,13 +177,16 @@ if __name__=="__main__":
         for surf in window_inputs:
             canvas.blit(surf["surface"],surf["location"])
 
+        keys=set()
 
         for event in pygame.event.get():
             if event.type==pygame.QUIT:
-                exit=True
+                leave_app()
             elif event.type==pygame.KEYDOWN:
                 if event.key==pygame.K_ESCAPE:
-                    exit=True
+                    leave_app()
+                else:
+                    keys.add(event.key)
             elif event.type==pygame.MOUSEBUTTONDOWN:
                 if event.button==pygame.BUTTON_LEFT:
                     for surf in window_inputs:
@@ -219,7 +231,23 @@ if __name__=="__main__":
                 settings.brush_size+=event.y/2
                 settings.brush_size=limit(settings.brush_size,.5,settings.step*settings.grid_size/2)
 
+        gestures=[
+            [{pygame.KMOD_LCTRL,pygame.KMOD_LSHIFT},{pygame.K_z},redo],
+            [{pygame.KMOD_LCTRL},{pygame.K_z},undo],
+            [{pygame.KMOD_LCTRL},{pygame.K_d},debug_mode],
+        ]
+
         
+        
+        mod_keys=pygame.key.get_mods()
+        for g in gestures:
+            mods=0
+            for m in g[0]:
+                mods |= m
+            
+            if g[1]<=keys and mods&mod_keys==mods:
+                g[2]()
+                break
 
         pygame.draw.circle(canvas,settings.color1,
                            draw_location,
