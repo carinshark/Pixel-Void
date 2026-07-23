@@ -43,6 +43,8 @@ class AppSettings:
 
         self.main_font=pygame.font.Font(self.file_path+"artAssets/GrapeSoda.ttf",size=30)
 
+        self.maximum_undos=32
+
         
 
     def calculate_parameters(self):

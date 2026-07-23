@@ -187,6 +187,8 @@ class SegmentCanvas(pygame.Surface):
     def save_state(self):
         if not (self.draw1 or self.draw2):
             self.previous_states=self.previous_states[:self.current_state+1]
+            if len(self.previous_states)>=self.settings.maximum_undos:
+                del self.previous_states[0]
             self.previous_states.append(self.grid_data.copy())
             self.current_state=len(self.previous_states)-1
 
