@@ -1,4 +1,8 @@
+<div style="color:#0d9;">
+
 # Pixel Void
+</div>
+
 *"Void of pixels" - painting only on the border of squares*
 
 ![](artAssets/PixelVoidIcon.png)
@@ -11,9 +15,12 @@
 5. [Credits](#credits)
 
 
-## Installation
+<div style="color:#f60;">
 
-<details><summary>click to expand/collapse</summary>
+ ## Installation 
+ </div>
+
+<details><summary style="background:#222;color:#ccc;">click to expand/collapse</summary>
 
 ### Windows
 Click [here]() to download
@@ -30,8 +37,11 @@ THIS HAS YET TO BE IMPLEMENTED
 open
 </details>
 
+<div style="color:#f60;">
+
 ## How to Use
-<details><summary>click to expand/collapse</summary>
+</div>
+<details><summary style="background:#222;color:#ccc;">click to expand/collapse</summary>
 
 Required items:  
 Mouse and keyboard
@@ -71,9 +81,11 @@ Once you select these to your liking, click **reset**.
 All lines/segments will be set to color2 by default. You can use this as a way to quickly fill your canvas with a color as well.
 
 </details>
+<div style="color:#f60;">
 
 ## About
-<details><summary>click to expand/collapse</summary>
+</div>
+<details><summary style="background:#222;color:#ccc;">click to expand/collapse</summary>
 
 On May 2026, I was trying to wire a 7 segment display to an arduino, and realized something about them - a 7 segment display is basically just a grid of 2 squares. What if this could be expanded?
 
@@ -87,33 +99,43 @@ To me, limitations can make things more fun or interesting, and behold! The plac
 
 </details>
 
+<div style="color:#f60;">
+
 ## Tips and Tricks
-<details><summary>click to expand/collapse</summary>
+</div>
+<details><summary style="background:#222;color:#ccc;">click to expand/collapse</summary>
 
 These are not required, but might help!
 
+---
 <img src="readMeAssets/filledgridbad.png" width=150>
 <img src="readMeAssets/filledgridgood.png" width=150>
 
 Avoid filling the entire canvas in a grid. Do not treat this like pixel art, instead try drawing with lines.  
 
+---
 <img src="readMeAssets/debug.png" width=100>
 
 The brush only draws if the center point of each line is touched by the brush. You can visualize these points using debug mode.
 
+---
 <img src="readMeAssets/storm.png" width=150>
 <img src="readMeAssets/badstorm.png" width=150>
 
 Use the lines to your advantage! They aren't just pixels, they have direction! Notice how on the image to the left, none of the lines are touching each other. This gives the subject more character, and you can express more detail in the limited space.
+
+---
 </details>
+<div style="color:#f60;">
 
 ## Credits
-<details open><summary>click to expand/collapse</summary>
+</div>
+<details open><summary style="background:#222;color:#ccc;">click to expand/collapse</summary>
 
 Font used - ["Grape Soda"](https://www.dafont.com/grapesoda-2.font) by [jeti](https://www.dafont.com/jeti.d1589) under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)  
 All other art assets and code by [carinshark](https://github.com/carinshark)  
 
-README images are screenshots from the app, or from the public domain.
+images in README.md are screenshots from the app, or from the public domain.
 
 Code written in python 3.14.3  
 Art made in [Aseprite](https://www.aseprite.org/)
