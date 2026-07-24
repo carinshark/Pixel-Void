@@ -3,9 +3,9 @@
 # Pixel Void
 </div>
 
-*"Void of pixels" - painting only on the border of squares*
+*A drawing app where you draw on the border between pixels -"In void of pixels"*
 
-![](artAssets/PixelVoidIcon.png)
+![](readMeAssets/drawing.gif)
 
 ## Table of contents:
 1. [Installation](#installation)
@@ -26,8 +26,11 @@
 Click [here]() to download
 
 run the `PixelVoid.exe` file
+If a blue screen shows up warning you about running it, click "More Info", then "Run Anyways"
 ### MacOS 
 Click [here]() to download
+
+run the `PixelVoid.exe` file
 
 THIS HAS YET TO BE IMPLEMENTED
 ### Linux
@@ -43,7 +46,9 @@ open
 </div>
 <details><summary style="background:#222;color:#ccc;">click to expand/collapse</summary>
 
-Required items:  
+![](/readMeAssets/drawnTitle.png)
+
+### Required items:  
 Mouse and keyboard
 
 ### Controls:
@@ -52,7 +57,8 @@ Mouse and keyboard
 **mouse wheel** - change brush size  
 **ctrl+z** - undo  
 **ctrl+shift+z** - redo  
-**ctrl+d** - toggle debug mode (for funsies)
+**ctrl+d** - toggle debug mode (for funsies)  
+**esc** - prompts you to quit app  
 ### Drawing:
 Click and drag on the canvas (big square on the top left of the screen) to draw.  
 
@@ -122,7 +128,7 @@ The brush only draws if the center point of each line is touched by the brush. Y
 <img src="readMeAssets/storm.png" width=150>
 <img src="readMeAssets/badstorm.png" width=150>
 
-Use the lines to your advantage! They aren't just pixels, they have direction! Notice how on the image to the left, none of the lines are touching each other. This gives the subject more character, and you can express more detail in the limited space.
+Use the lines to your advantage! They aren't just pixels, they have direction! Notice how on the image to the left, the lines are not filled in all the way. This gives the subject more character, and you can express more detail in the limited space.
 
 ---
 </details>
@@ -135,7 +141,7 @@ Use the lines to your advantage! They aren't just pixels, they have direction! N
 Font used - ["Grape Soda"](https://www.dafont.com/grapesoda-2.font) by [jeti](https://www.dafont.com/jeti.d1589) under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)  
 All other art assets and code by [carinshark](https://github.com/carinshark)  
 
-images in README.md are screenshots from the app, or from the public domain.
+Images in README.md are screenshots from the app, or from the public domain.
 
 Code written in python 3.14.3  
 Art made in [Aseprite](https://www.aseprite.org/)
