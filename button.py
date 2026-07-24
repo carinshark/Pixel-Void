@@ -3,12 +3,12 @@ from appSettings import AppSettings
 
 class Button(pygame.Surface):
     def __init__(self,icon:str,settings:AppSettings,
-                 function1,function2:function=None,icon2:str=None):
+                 function1,function2=None,icon2:str=None):
         self.bkg_img=pygame.image.load(icon)
         super().__init__(self.bkg_img.size)
         self.settings=settings
-        self.function1:function=function1
-        self.function2:function=function2
+        self.function1=function1
+        self.function2=function2
 
         
 

@@ -26,6 +26,9 @@
 Click [here]() to download
 
 run the `PixelVoid.exe` file
+
+<img src="readMeAssets\windowsSmartScreen.png" width=200>
+
 If a blue screen shows up warning you about running it, click "More Info", then "Run Anyways"
 ### MacOS 
 Click [here]() to download
@@ -37,7 +40,7 @@ THIS HAS YET TO BE IMPLEMENTED
 Click [here]() to download
 
 THIS HAS YET TO BE IMPLEMENTED
-open
+
 </details>
 
 <div style="color:#f60;">
