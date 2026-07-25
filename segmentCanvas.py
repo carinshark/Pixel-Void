@@ -42,7 +42,7 @@ class SegmentCanvas(pygame.Surface):
         root=Tk()
         root.withdraw()
 
-        path = filedialog.askopenfile(mode="rb",defaultextension="npz",filetypes=[("Numpy File","npz")])
+        path = filedialog.askopenfile(mode="rb",defaultextension=".npz",filetypes=[("Numpy File",".npz")])
 
         try:
             if path:
@@ -76,7 +76,7 @@ class SegmentCanvas(pygame.Surface):
         root=Tk()
         root.withdraw()
         #prompt file
-        path = filedialog.asksaveasfile(mode="wb",defaultextension="npz",filetypes=[("Numpy File","npz")])
+        path = filedialog.asksaveasfile(mode="wb",defaultextension=".npz",filetypes=[("Numpy File",".npz")])
         #save to location
 
         try:
@@ -109,8 +109,8 @@ class SegmentCanvas(pygame.Surface):
         root=Tk()
         root.withdraw()
         path = filedialog.asksaveasfile(
-            mode="wb",defaultextension="jpg",
-            filetypes=[("jpg Image","*.jpg"),("PNG Image","*.png")])
+            mode="wb",defaultextension=".jpg",
+            filetypes=[("jpg Image",".jpg"),("PNG Image",".png")])
 
         #save to location
         try:
