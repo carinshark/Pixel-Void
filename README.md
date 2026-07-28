@@ -20,6 +20,8 @@
  ## Installation 
  </div>
 
+The executable versions of this app are currently supported by linux and windows only.
+
 <details><summary style="background:#222;color:#ccc;">click to expand/collapse</summary>
 
 ### Windows
