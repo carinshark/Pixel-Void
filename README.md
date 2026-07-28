@@ -23,23 +23,22 @@
 <details><summary style="background:#222;color:#ccc;">click to expand/collapse</summary>
 
 ### Windows
-Click [here]() to download
+Click [here](https://github.com/carinshark/Pixel-Void/releases/download/v1.0.1-W/PixelVoid.exe) to download
 
 run the `PixelVoid.exe` file
 
 <img src="readMeAssets\windowsSmartScreen.png" width=200>
 
 If a blue screen shows up warning you about running it, click "More Info", then "Run Anyways"
-### MacOS 
-Click [here]() to download
 
-run the `PixelVoid.exe` file
-
-THIS HAS YET TO BE IMPLEMENTED
 ### Linux
-Click [here]() to download
+Click [here](https://github.com/carinshark/Pixel-Void/releases/download/v1.0.1-L/PixelVoid) to download.
 
-THIS HAS YET TO BE IMPLEMENTED
+Run the file `PixelVoid`
+
+If it fails to run, open the folder it's in up in a terminal, and run `chmod +x PixelVoid` like so:
+
+![](/readMeAssets/chmodthing.png)
 
 </details>
 
