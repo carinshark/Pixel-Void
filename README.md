@@ -42,6 +42,8 @@ If it fails to run, open the folder it's in up in a terminal, and run `chmod +x 
 
 ![](/readMeAssets/chmodthing.png)
 
+You can then try running it again.
+
 </details>
 
 <div style="color:#f60;">
